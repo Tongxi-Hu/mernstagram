@@ -1,0 +1,1 @@
+### mock of instagram using MERN stack with Typescript 
