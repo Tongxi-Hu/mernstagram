@@ -1,0 +1,17 @@
+export interface UserType {
+  _id: string,
+  fullname: string,
+  username: string,
+  email: string,
+  password: string,
+  avatar: string,
+  role: string,
+  gender: string,
+  mobile: string,
+  address: string,
+  story: string,
+  website: string,
+  followers: Array<string>,
+  following: Array<string>,
+  saved: Array<string>,
+}
