@@ -110,7 +110,7 @@ const generateAccessToken=async (req: Request, res: Response)=>{
       const user=await User.findById(decoded.id).select("-password").populate("followers following", "-password");
       if (!user) return res.status(400).json({msg: "user not exist"});
       const access_token=createAccessToken({id: decoded.id});
-      res.json({message: "token refresh success", access_token, user});
+      res.json({msg: "token refresh success", access_token, user});
     });
   } catch (e: any) {
     return res.status(500).json({msg: e.message});

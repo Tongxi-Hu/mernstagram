@@ -14,14 +14,6 @@ code {
     monospace;
 }
 
-#theme{
-  display: none;
-}
-
-#theme:checked ~ .App{
-  filter: invert(1)
-}
-
 .App{
   max-width: 100%;
   min-height: 100vh;
@@ -34,6 +26,11 @@ code {
   margin: auto;
 }
 
-@import url("./style/auth.css");
-@import url("./style/loading.css");
-@import url("./style/header.css");
+.card:hover{
+  cursor: pointer;
+}
+
+@import url("./auth.css");
+@import url("./loading.css");
+@import url("./header.css");
+@import url("./avatar.css");

@@ -5,21 +5,25 @@ import React, {FC} from "react";
 
 import auth, {AuthState} from "./auth";
 import notify, {NotifyState} from "./notify";
-import darkMode from "./theme";
+import darkMode, {DarkModeState} from "./theme";
+import search, {SearchState} from "./search";
+import {composeWithDevTools} from "redux-devtools-extension";
 
 const reducer=combineReducers({
   auth,
   notify,
   darkMode,
+  search
 });
 
-export interface State{
-  auth:AuthState;
-  notify:NotifyState;
-  darkMode:boolean;
+export interface State {
+  auth: AuthState;
+  notify: NotifyState;
+  darkMode: DarkModeState;
+  search: SearchState;
 }
 
-const store=createStore(reducer, applyMiddleware(thunk));
+const store=createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 const DataProvider: FC=({children})=>{
   return (

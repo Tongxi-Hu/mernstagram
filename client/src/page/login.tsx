@@ -24,7 +24,7 @@ const Login=()=>{
   };
 
   useEffect(()=>{
-    if (authState.token) history.push("/");
+    if (authState.token) history.goBack();
   }, [authState.token, history]);
   return (
     <div className="auth_page">

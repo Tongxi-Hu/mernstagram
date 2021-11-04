@@ -1,3 +1,6 @@
+import {ThunkAction} from "redux-thunk";
+import {State} from "./index";
+
 export enum NOTIFY_ACTION_TYPE {
   LOADING="LOADING",
   SUCCESS="SUCCESS",
@@ -46,8 +49,8 @@ const notifyReducer=(state: NotifyState={loading: false, success: "", fail: ""},
   }
 };
 
-export const clearNotify=()=>{
-  return {type: NOTIFY_ACTION_TYPE.CLEAR};
+export const clearNotify=(): ThunkAction<any, State, any, NOTIFY_ACTION>=>(dispatch)=>{
+  dispatch({type: NOTIFY_ACTION_TYPE.CLEAR});
 };
 
 export default notifyReducer;
