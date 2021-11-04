@@ -33,7 +33,7 @@ const Menu: FC<{ navLinks: Array<{ label: string, icon: string, path: string }> 
       <li className="nav-item dropdown me-3">
               <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <Avatar url={authState.user!.avatar} username={authState.user!.username} dark={darkMode.darkMode}/>
+                <Avatar url={authState.user!.avatar} username={authState.user!.username} size="small-avatar"/>
               </span>
         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><Link className="dropdown-item" to={`/profile/${authState.user!._id}`}>Profile</Link></li>

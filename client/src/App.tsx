@@ -18,9 +18,8 @@ function App() {
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const darkMode=useSelector<State, DarkModeState>(state=>state.darkMode);
-  const notify=useSelector<State,NotifyState>(state=>state.notify);
-  const [display,setDisplay]=useState(false);
-
+  const notify=useSelector<State, NotifyState>(state=>state.notify);
+  const [display, setDisplay]=useState(false);
 
   useEffect(()=>{
     dispatch(refreshToken());
@@ -28,14 +27,16 @@ function App() {
 
   useEffect(()=>{
     setDisplay(true);
-    setTimeout(()=>{setDisplay(false)},1000)
-  },[notify])
+    setTimeout(()=>{
+      setDisplay(false);
+    }, 1000);
+  }, [notify, dispatch]);
   return (
     <BrowserRouter>
-      <div style={{display:display?"":"none"}}>
-      <Notify />
+      <div style={{display: display ? "" : "none"}}>
+        <Notify/>
       </div>
-      <div className="App" style={{filter: darkMode.darkMode?"invert(1)":""}}>
+      <div className="App" style={{filter: darkMode.darkMode ? "invert(1)" : ""}}>
         <SearchResult/>
         <div className="main">
           {authState.token && <Header/>}

@@ -1,8 +1,8 @@
 import React, {FC} from "react";
 
-const Avatar:FC<{url:string,username:string,dark:boolean}>=({url,username,dark})=>{
+const Avatar:FC<{url:string,username:string,size:string}>=({url,username,size})=>{
   return (
-    <img src={url} alt={username} className="small-avatar" style={{filter:`${dark? 'invert(1)':'invert(0)'}`}}/>
+    <img src={url} alt={username} className={size}/>
   );
 };
 

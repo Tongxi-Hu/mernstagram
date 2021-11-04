@@ -19,7 +19,8 @@ const Search=()=>{
       <input className="form-control me-2" type="search" value={search}
         onChange={(e)=>setSearch(e.target.value)} aria-label="Search"/>
       <button className="btn btn-outline-info" type="submit" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" disabled={!search}>Search
+        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" disabled={!search}>
+        Search
       </button>
     </form>
   );
