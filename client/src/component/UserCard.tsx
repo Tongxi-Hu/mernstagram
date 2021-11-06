@@ -11,7 +11,7 @@ const UserCard: FC<{ user: UserType }>=({user})=>{
     }}>
       <div className="row g-0">
         <div className="col-4">
-          <img src={user.avatar} className="img-fluid rounded-start" alt="..."/>
+          <img src={user.avatar} className="img-fluid rounded-start card_avatar" alt="..."/>
         </div>
         <div className="col-8">
           <div className="card-body">

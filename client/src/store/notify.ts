@@ -53,4 +53,8 @@ export const clearNotify=(): ThunkAction<any, State, any, NOTIFY_ACTION>=>(dispa
   dispatch({type: NOTIFY_ACTION_TYPE.CLEAR});
 };
 
+export const notifyFail=(msg: string): ThunkAction<any, State, any, NOTIFY_ACTION>=>(dispatch)=>{
+  dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: msg});
+};
+
 export default notifyReducer;
