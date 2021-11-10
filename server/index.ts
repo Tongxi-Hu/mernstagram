@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 import authRouter from "./router/authRouter";
 import userRouter from "./router/userRouter";
+import postRouter from "./router/postRouter";
 
 dotenv.config();
 const app=express();
@@ -21,7 +22,8 @@ mongoose.connect(URI!).then(()=>{
 });
 
 app.use("/api", authRouter);
-app.use("/api",userRouter);
+app.use("/api", userRouter);
+app.use("/api", postRouter);
 
 const PORT=process.env.PORT || 4000;
 app.listen(PORT, ()=>{

@@ -14,7 +14,7 @@ const Info=()=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const {id}=useParams<{ id: string }>();
   const profile=useSelector<State, UserType>(state=>state.profile);
-  const [onEdit,setOnEdit]=useState(false);
+  const [onEdit, setOnEdit]=useState(false);
 
   useEffect(()=>{
     dispatch(getProfile(id, authState.token));
@@ -27,27 +27,30 @@ const Info=()=>{
           <div className="info_content">
               <div className="info_content_title">
                   <h2>{profile.username}</h2>
-                {profile._id===authState.user?._id?
-                <button className="btn btn-outline-success btn-sm mt-1" onClick={()=>setOnEdit(true)}>Edit Profile</button>
-                :<FollowButton/>
+                {profile._id===authState.user?._id ?
+                  <button className="btn btn-outline-success btn-sm mt-1"
+                    onClick={()=>setOnEdit(true)}>Edit Profile</button>
+                  : <FollowButton profile={profile}/>
                 }
               </div>
-              <h6>{profile.fullname}</h6>
-            <div className="follow_btn">
+              <div className="info_detail">
+                  <h6>{profile.fullname}</h6>
+                  <div className="follow_btn">
                   <span className="me-4">
                       {profile.followers.length} Followers
                   </span>
-                  <span className="ms-4">
+                      <span className="ms-4">
                       {profile.following.length} Following
                   </span>
+                  </div>
+                  <p className="m-0">{profile.address}</p>
+                  <p className="m-0">{profile.email}</p>
+                  <a href={profile.website} target="_blank" rel="noreferrer">{profile.website}</a>
+                  <p>{profile.story}</p>
               </div>
-              <p className="m-0">{profile.address}</p>
-              <p className="m-0">{profile.email}</p>
-              <a href={profile.website} target="_blank" rel="noreferrer">{profile.website}</a>
-              <p>{profile.story}</p>
           </div>
       </div>}
-      {profile&&onEdit&&<EditProfile profile={profile} setOnEdit={setOnEdit}/>}
+      {profile && onEdit && <EditProfile profile={profile} setOnEdit={setOnEdit}/>}
     </div>
   );
 };

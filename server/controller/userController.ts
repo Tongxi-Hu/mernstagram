@@ -17,7 +17,6 @@ const getUserInfo=async (req: Request, res: Response)=>{
     res.json({msg: "user detail found", user});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
-
   }
 };
 
@@ -29,14 +28,43 @@ const updateUser=async (req: Request, res: Response)=>{
     await User.findByIdAndUpdate(req.user._id, {avatar, fullname, mobile, address, story, website, gender});
     res.json({msg: "update success"});
   } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
 
+const follow=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const user=await User.find({_id: req.params.id, followers: req.user._Id});
+    if (user.length>0) return res.status(500).json({msg: "you followed this user"});
+    // @ts-ignore
+    await User.findOneAndUpdate({_id: req.params.id}, {$push: {followers: req.user._id}}, {new: true});
+    // @ts-ignore
+    await User.findOneAndUpdate({_id: req.user._id}, {$push: {following: req.params.id}}, {new: true});
+    res.json({msg: "followed user"});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const unfollow=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    await User.findOneAndUpdate({_id: req.params.id}, {$pull: {followers: req.user._id}}, {new: true});
+    // @ts-ignore
+    await User.findOneAndUpdate({_id: req.user._id}, {$pull: {following: req.params.id}}, {new: true});
+    res.json({msg: "unfollowed user"});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
   }
 };
 
 const userController={
   searchUser,
   getUserInfo,
-  updateUser
+  updateUser,
+  follow,
+  unfollow
 };
 
 export default userController;

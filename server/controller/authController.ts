@@ -31,7 +31,7 @@ const register=async (req: Request, res: Response)=>{
     });
     res.json({
       msg: "register success!", access_token, user: {
-        _id:user._id,
+        _id: user._id,
         fullname: user.fullname,
         email: user.email,
         username: user.username,
@@ -56,7 +56,7 @@ const register=async (req: Request, res: Response)=>{
 const login=async (req: Request, res: Response)=>{
   try {
     const {email, password}=req.body;
-    const user=await User.findOne({email}).populate("followers following", "-password");
+    const user=await User.findOne({email});
     if (!user) return res.status(400).json({msg: "invalid info"});
     const match=await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({msg: "invalid info"});
@@ -69,7 +69,7 @@ const login=async (req: Request, res: Response)=>{
     });
     res.json({
       msg: "login success!", access_token, user: {
-        _id:user._id,
+        _id: user._id,
         fullname: user.fullname,
         email: user.email,
         username: user.username,
@@ -107,7 +107,7 @@ const generateAccessToken=async (req: Request, res: Response)=>{
     // @ts-ignore
     jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET!, async (err: any, decoded: JwtPayload)=>{
       if (err) return res.status(400).json({msg: "login now"});
-      const user=await User.findById(decoded.id).select("-password").populate("followers following", "-password");
+      const user=await User.findById(decoded.id).select("-password");
       if (!user) return res.status(400).json({msg: "user not exist"});
       const access_token=createAccessToken({id: decoded.id});
       res.json({msg: "token refresh success", access_token, user});

@@ -13,11 +13,14 @@ import Register from "./page/register";
 import SearchResult from "./component/SearchResult";
 import {DarkModeState} from "./store/theme";
 import {NotifyState} from "./store/notify";
+import {STATUS} from "./store/status";
+import StatusModal from "./component/StatusModal";
 
 function App() {
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const darkMode=useSelector<State, DarkModeState>(state=>state.darkMode);
+  const status=useSelector<State, STATUS>(state=>state.status)
   const notify=useSelector<State, NotifyState>(state=>state.notify);
   const [display, setDisplay]=useState(false);
 
@@ -40,6 +43,7 @@ function App() {
         <SearchResult/>
         <div className="main">
           {authState.token && <Header/>}
+          {status.modal&&<StatusModal/>}
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>

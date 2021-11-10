@@ -10,13 +10,15 @@ import notify, {NotifyState} from "./notify";
 import darkMode, {DarkModeState} from "./theme";
 import search, {SearchState} from "./search";
 import profile from "./profile";
+import status, {STATUS} from "./status";
 
 const reducer=combineReducers({
   auth,
   notify,
   darkMode,
   search,
-  profile
+  profile,
+  status
 });
 
 export interface State {
@@ -24,7 +26,8 @@ export interface State {
   notify: NotifyState;
   darkMode: DarkModeState;
   search: SearchState;
-  profile:UserType
+  profile: UserType,
+  status: STATUS
 }
 
 const store=createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

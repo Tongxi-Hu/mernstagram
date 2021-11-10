@@ -103,7 +103,6 @@ export const refreshToken=(): ThunkAction<any, State, any, AUTH_ACTION | NOTIFY_
       dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     } catch (e: any) {
       dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
-
     }
   }
 };
