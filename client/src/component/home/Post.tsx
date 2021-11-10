@@ -12,8 +12,8 @@ const Post=()=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const homePosts=useSelector<State, PostState>(state=>state.homePosts);
   useEffect(()=>{
-    dispatch(getPosts(authState.token));
-  }, [authState.token,dispatch]);
+    if (authState.token) dispatch(getPosts(authState.token));
+  }, [authState.token, dispatch]);
 
   return (
     <>
@@ -22,8 +22,8 @@ const Post=()=>{
           {homePosts.map(post=>(
             <div className="card my-3" key={post._id}>
               <CardHeader post={post}/>
-              <CardBody />
-              <CardFooter/>
+              <CardBody post={post}/>
+              <CardFooter post={post}/>
             </div>
           ))}
         </div>}

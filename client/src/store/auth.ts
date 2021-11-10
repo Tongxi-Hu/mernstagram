@@ -7,7 +7,7 @@ import {State} from "./index";
 import {validateUserInfo} from "../util/validate";
 import {AxiosResponse} from "axios";
 
-enum AUTH_ACTION_TYPE {
+export enum AUTH_ACTION_TYPE {
   LOGIN="LOGIN",
   REGISTER="REGISTER",
   LOGOUT="LOGOUT"
@@ -26,7 +26,7 @@ type AUTH_ACTION_LOGOUT={
   type: AUTH_ACTION_TYPE.LOGOUT;
 }
 
-type AUTH_ACTION=AUTH_ACTION_LOGIN | AUTH_ACTION_REGISTER | AUTH_ACTION_LOGOUT
+export type AUTH_ACTION=AUTH_ACTION_LOGIN | AUTH_ACTION_REGISTER | AUTH_ACTION_LOGOUT
 
 export type AuthState={ token: string, user: UserType | null };
 

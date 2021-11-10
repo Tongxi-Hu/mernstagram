@@ -17,7 +17,11 @@ const FollowButton: FC<{ profile: UserType }>=({profile})=>{
   };
 
   useEffect(()=>{
-    if (authState.user!.following.find(following=>following===profile._id)) setFollowed(true);
+    if (authState.user!.following.find(following=>following===profile._id)) {
+      setFollowed(true);
+    } else {
+      setFollowed(false);
+    }
   }, [profile, authState]);
 
   return (

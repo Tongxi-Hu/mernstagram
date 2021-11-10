@@ -1,14 +1,15 @@
-import React, {ChangeEvent, FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {closeModal} from "../store/status";
+import {closeModal, STATUS} from "../store/status";
 import {AuthState} from "../store/auth";
 import {State} from "../store";
 import {notifyFail} from "../store/notify";
-import {createPost} from "../store/post";
+import {createPost, updatePost} from "../store/post";
 
 const StatusModal=()=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
+  const status=useSelector<State, STATUS>(state=>state.status);
   const [content, setContent]=useState("");
   const [images, setImages]=useState<Array<File>>([]);
 
@@ -34,11 +35,27 @@ const StatusModal=()=>{
   const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if (images.length===0) return dispatch(notifyFail("add your photo"));
-    dispatch(createPost(content, images, authState));
+    if (status.post?._id) {
+      dispatch(updatePost(content, images, authState, status.post._id));
+    } else {
+      dispatch(createPost(content, images, authState));
+    }
     setContent("");
     setImages([]);
     dispatch(closeModal());
   };
+
+  useEffect(()=>{
+    if (status.post) {
+      setContent(status.post.content);
+      status.post.images.forEach(async (image, index)=>{
+        const res=await fetch(image);
+        const data=await res.blob();
+        const file=new File([data], index+".jpg");
+        setImages(oldImages=>[...oldImages, file]);
+      });
+    }
+  }, [status.post]);
 
   return (
     <div className="status_modal">

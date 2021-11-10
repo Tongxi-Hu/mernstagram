@@ -2,9 +2,9 @@ import {UserType} from "../type/User";
 import {ThunkAction} from "redux-thunk";
 import {State} from "./index";
 import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
-import {getDataAPI, patchDataAPI} from "../util/fetchData";
+import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {uploadImage} from "../util/uploadImage";
-import {refreshToken} from "./auth";
+import {AUTH_ACTION, AUTH_ACTION_TYPE} from "./auth";
 
 enum PROFILE_ACTION_TYPE {
   GET_PROFIlE="GET_PROFILE",
@@ -60,28 +60,32 @@ export const updateUserProfile=(userData: UserType, avatar: File,
 };
 
 export const followUser=(id: string,
-  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION>=>async (dispatch)=>{
+  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
-    const res1=await patchDataAPI("user/"+id+"/follow", token, null);
-    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res1.data.msg});
-    const res=await getDataAPI("user/"+id, token);
-    dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res.data.user});
-    dispatch(refreshToken());
+    const res=await patchDataAPI("user/"+id+"/follow", token, null);
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+    const res1=await getDataAPI("user/"+id, token);
+    dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res1.data.user});
+    const res2=await postDataAPI("refresh_token", "", "");
+    dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res2.data.access_token, user: res2.data.user}});
+    localStorage.setItem("mernstagram", res2.data.access_token);
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }
 };
 
 export const unfollowUser=(id: string,
-  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION>=>async (dispatch)=>{
+  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
-    const res1=await patchDataAPI("user/"+id+"/unfollow", token, null);
-    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res1.data.msg});
-    const res=await getDataAPI("user/"+id, token);
-    dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res.data.user});
-    dispatch(refreshToken());
+    const res=await patchDataAPI("user/"+id+"/unfollow", token, null);
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+    const res1=await getDataAPI("user/"+id, token);
+    dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res1.data.user});
+    const res2=await postDataAPI("refresh_token", "", "");
+    dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res2.data.access_token, user: res2.data.user}});
+    localStorage.setItem("mernstagram", res2.data.access_token);
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }

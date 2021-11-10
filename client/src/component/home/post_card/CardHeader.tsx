@@ -4,10 +4,17 @@ import {Link} from "react-router-dom";
 import moment from "moment";
 import {AuthState} from "../../../store/auth";
 import {State} from "../../../store";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {openEditPost} from "../../../store/status";
 
 const CardHeader: FC<{ post: PostType }>=({post})=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
+  const dispatch=useDispatch();
+
+  const handleEditClick=()=>{
+    dispatch(openEditPost(post));
+  };
+
   return (
     <div className="card_header">
       <div className="d-flex">
@@ -15,7 +22,7 @@ const CardHeader: FC<{ post: PostType }>=({post})=>{
           <h6>
             <Link to={`/profile/${post.user}`}>@{post.username}</Link>
           </h6>
-          <small className="text-muted">{moment(post.updatedAt).fromNow()}</small>
+          <small className="text-muted">{moment(post.createdAt).fromNow()}</small>
         </div>
       </div>
       <div className="nav-item dropdown">
@@ -26,7 +33,7 @@ const CardHeader: FC<{ post: PostType }>=({post})=>{
           {
             authState.user?._id===post.user &&
             <>
-                <div className="dropdown-item">
+                <div className="dropdown-item" onClick={handleEditClick}>
                     <span className="material-icons">create</span>edit
                 </div>
                 <div className="dropdown-item">

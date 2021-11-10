@@ -1,3 +1,7 @@
+.home{
+    margin-top:4.4rem;
+}
+
 .status {
     background: white;
     box-shadow: 0 0 0.2rem #ddd;
@@ -47,3 +51,48 @@
     display: flex;
     margin: 0.3rem 0;
 }
+
+.posts .card_body-content {
+    padding: 0 1.6rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+}
+
+.posts .card_body-content .readMore {
+    background: teal;
+    color: white;
+    margin-left: 0.5rem;
+    font-weight: 300;
+    font-size:0.8rem;
+    border-radius:0.2rem;
+}
+
+.posts .card_icon_menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.6rem;
+    cursor: pointer;
+}
+
+.posts .card_icon_menu i {
+    font-size: 1.4rem;
+    margin: 0.4rem;
+}
+
+.posts .card_icon_menu img {
+    width: 1.5rem;
+    height: 1.5rem;
+    transform: translate(0.4rem,-0.2rem);
+    opacity: 0.8;
+}
+
+.posts .footer_info{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1.8rem;
+}
+.posts .footer_info h6{
+    padding-left: 1rem;
+    font-weight: 300;
+}
+

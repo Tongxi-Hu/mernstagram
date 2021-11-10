@@ -45,7 +45,7 @@ const Info=()=>{
                   </div>
                   <p className="m-0">{profile.address}</p>
                   <p className="m-0">{profile.email}</p>
-                  <a href={profile.website} target="_blank" rel="noreferrer">{profile.website}</a>
+                  <a href={profile.website} target="_blank" rel="noreferrer">{profile.website.slice(0,35)+"..."}</a>
                   <p>{profile.story}</p>
               </div>
           </div>
