@@ -6,6 +6,7 @@ export interface PostType extends mongoose.Document {
   likes: Array<ObjectId>;
   comments: Array<ObjectId>;
   user: ObjectId;
+  username: string;
 }
 
 const postSchema=new mongoose.Schema({
@@ -16,7 +17,8 @@ const postSchema=new mongoose.Schema({
   },
   likes: [{type: mongoose.Types.ObjectId, ref: "User"}],
   comments: [{type: mongoose.Types.ObjectId, ref: "Comment"}],
-  user: {type: mongoose.Types.ObjectId, ref: "User"}
+  user: {type: mongoose.Types.ObjectId, ref: "User"},
+  username: {type: String, required: true}
 }, {
   timestamps: true
 });

@@ -4,6 +4,7 @@ import {State} from "./index";
 import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
 import {getDataAPI, patchDataAPI} from "../util/fetchData";
 import {uploadImage} from "../util/uploadImage";
+import {refreshToken} from "./auth";
 
 enum PROFILE_ACTION_TYPE {
   GET_PROFIlE="GET_PROFILE",
@@ -66,6 +67,7 @@ export const followUser=(id: string,
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res1.data.msg});
     const res=await getDataAPI("user/"+id, token);
     dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res.data.user});
+    dispatch(refreshToken());
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }
@@ -79,6 +81,7 @@ export const unfollowUser=(id: string,
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res1.data.msg});
     const res=await getDataAPI("user/"+id, token);
     dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res.data.user});
+    dispatch(refreshToken());
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }

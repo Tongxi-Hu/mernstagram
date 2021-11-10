@@ -5,4 +5,7 @@ export interface PostType {
   likes: Array<string>;
   comments: Array<string>;
   user: string;
+  username: string;
+  createdAt: string;
+  updatedAt: string;
 }

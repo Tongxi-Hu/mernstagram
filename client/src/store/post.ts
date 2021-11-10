@@ -3,27 +3,26 @@ import {ThunkAction} from "redux-thunk";
 import {State} from "./index";
 import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
 import {uploadImage} from "../util/uploadImage";
-import {postDataAPI} from "../util/fetchData";
+import {getDataAPI, postDataAPI} from "../util/fetchData";
 import {PostType} from "../type/Post";
 
 enum POST_ACTION_TYPE {
-  CREATE_POST="CREATE_POST",
+  GET_POST="GET_POST",
 }
 
-type POST_ACTION_CREATE={
-  type: POST_ACTION_TYPE.CREATE_POST;
-  payload: { content: string, images: Array<string>, user: string }
+type POST_ACTION_GET={
+  type: POST_ACTION_TYPE.GET_POST;
+  payload: Array<PostType>
 }
 
-type POST_ACTION=POST_ACTION_CREATE
+type POST_ACTION=POST_ACTION_GET
 
-interface postState {
-  posts: Array<PostType>;
-}
+export type PostState=Array<PostType>;
 
-const postReducer=(state: postState={posts: []}, action: POST_ACTION): postState=>{
+const postReducer=(state: PostState=[], action: POST_ACTION): PostState=>{
   switch (action.type) {
-
+    case POST_ACTION_TYPE.GET_POST:
+      return action.payload;
     default:
       return state;
   }
@@ -41,6 +40,18 @@ export const createPost=(content: string, images: Array<File>,
       user: authState.user!._id
     });
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+    dispatch(getPosts(authState.token));
+  } catch (e: any) {
+    dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
+  }
+};
+
+export const getPosts=(token: string): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
+  try {
+    dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
+    const res=await getDataAPI("post", token);
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+    dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res.data.posts});
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }

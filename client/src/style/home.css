@@ -1,22 +1,49 @@
-.status{
+.status {
     background: white;
     box-shadow: 0 0 0.2rem #ddd;
-    padding:1.5rem;
-    border-radius:0.5rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
 }
 
- .status_button{
-    background:#f1f1f1;
-    border:none;
-    outline:none;
-    border-radius:2rem;
-    color:#555;
+.status_button {
+    background: #f1f1f1;
+    border: none;
+    outline: none;
+    border-radius: 2rem;
+    color: #555;
     padding: 0 1.4rem;
     margin-left: 0.4rem;
-    width:90%;
+    width: 90%;
     text-align: left;
 }
 
- .status_button:hover{
-     background: #ddd;
- }
+.status_button:hover {
+    background: #ddd;
+}
+
+.posts .card {
+    box-shadow: 0 0 0.8rem #ddd;
+}
+
+.posts .card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+}
+
+.posts .card_header .card_name {
+    transform: translateY(0.2rem);
+}
+
+.posts .card_header .dropdown-menu {
+    position: absolute;
+    left: inherit !important;
+    right: 0;
+}
+
+.posts .card_header .dropdown-item {
+    display: flex;
+    margin: 0.3rem 0;
+}

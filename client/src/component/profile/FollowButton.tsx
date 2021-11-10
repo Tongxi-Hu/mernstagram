@@ -10,11 +10,9 @@ const FollowButton: FC<{ profile: UserType }>=({profile})=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const [followed, setFollowed]=useState(false);
   const handleUnfollow=()=>{
-    setFollowed(false);
     dispatch(unfollowUser(profile._id, authState.token));
   };
   const handleFollow=()=>{
-    setFollowed(true);
     dispatch(followUser(profile._id, authState.token));
   };
 
