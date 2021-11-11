@@ -3,7 +3,12 @@ import {CommentType} from "../../../type/Comment";
 import {PostType} from "../../../type/Post";
 import {AuthState} from "../../../store/auth";
 
-const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthState }>=({post, comment, authState})=>{
+const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthState, setOnEdit: (onEdit: boolean)=>void }>=({
+  post,
+  comment,
+  authState,
+  setOnEdit
+})=>{
 
   return (
     <div>
@@ -20,7 +25,7 @@ const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthSta
               </div>}
             {comment.user===authState.user._id &&
             <>
-                <div className="dropdown-item">
+                <div className="dropdown-item" onClick={()=>setOnEdit(true)}>
                     <span className="material-icons">create</span>edit
                 </div>
                 <div className="dropdown-item">
