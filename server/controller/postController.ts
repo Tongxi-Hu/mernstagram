@@ -1,5 +1,6 @@
 import Post from "../model/Post";
 import {Request, Response} from "express";
+import {CommentType} from "../model/Comment";
 
 const createPost=async (req: Request, res: Response)=>{
   try {
@@ -17,7 +18,9 @@ const createPost=async (req: Request, res: Response)=>{
 const getPosts=async (req: Request, res: Response)=>{
   try {
     // @ts-ignore
-    const posts=await Post.find({user: [...req.user.following, req.user._id]}).sort("-createdAt");
+    const posts=await Post.find({user: [...req.user.following, req.user._id]})
+                          .populate<{ comments: Array<CommentType> }>("comments")
+                          .sort("-createdAt");
     res.json({msg: "new posts", result: posts.length, posts});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});

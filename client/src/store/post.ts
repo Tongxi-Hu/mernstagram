@@ -6,7 +6,7 @@ import {uploadImage} from "../util/uploadImage";
 import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {PostType} from "../type/Post";
 
-enum POST_ACTION_TYPE {
+export enum POST_ACTION_TYPE {
   GET_POST="GET_POST",
 }
 
@@ -15,7 +15,7 @@ type POST_ACTION_GET={
   payload: Array<PostType>
 }
 
-type POST_ACTION=POST_ACTION_GET
+export type POST_ACTION=POST_ACTION_GET
 
 export type PostState=Array<PostType>;
 
@@ -38,8 +38,8 @@ export const createPost=(content: string, images: Array<File>,
       content,
       images: media.map(image=>image.url)
     });
-    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     const res1=await getDataAPI("post", authState.token);
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});

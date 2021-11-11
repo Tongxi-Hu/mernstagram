@@ -3,9 +3,7 @@ import {getPosts, PostState} from "../../store/post";
 import {AuthState} from "../../store/auth";
 import {useDispatch, useSelector} from "react-redux";
 import {State} from "../../store";
-import CardHeader from "./post_card/CardHeader";
-import CardBody from "./post_card/CardBody";
-import CardFooter from "./post_card/CardFooter";
+import PostCard from "../PostCard";
 
 const Post=()=>{
   const dispatch=useDispatch();
@@ -20,11 +18,7 @@ const Post=()=>{
       {homePosts.length===0 ? <h2 className="text-center">No Post</h2> :
         <div className="posts">
           {homePosts.map(post=>(
-            <div className="card my-3" key={post._id}>
-              <CardHeader post={post}/>
-              <CardBody post={post}/>
-              <CardFooter post={post}/>
-            </div>
+            <PostCard post={post} key={post._id}/>
           ))}
         </div>}
     </>

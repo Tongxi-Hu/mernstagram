@@ -30,6 +30,7 @@ function App() {
 
   useEffect(()=>{
     setDisplay(true);
+    if(notify.loading) return;
     setTimeout(()=>{
       setDisplay(false);
     }, 1000);

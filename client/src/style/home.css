@@ -41,6 +41,12 @@
     transform: translateY(0.2rem);
 }
 
+.posts .card_header .card_name h6 a{
+    color:teal;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
 .posts .card_header .dropdown-menu {
     position: absolute;
     left: inherit !important;
@@ -59,7 +65,7 @@
 }
 
 .posts .card_body-content .readMore {
-    background: teal;
+    background: cadetblue;
     color: white;
     margin-left: 0.5rem;
     font-weight: 300;
