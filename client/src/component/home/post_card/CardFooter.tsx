@@ -41,7 +41,7 @@ const CardFooter: FC<{ post: PostType }>=({post})=>{
       </div>
       <div className="footer_info">
         <h6>{post.likes.length} likes</h6>
-        <h6>{post.comments.length} comments</h6>
+        <h6>{post.comments.filter(comment=>!comment.reply).length} comments</h6>
       </div>
     </div>
   );

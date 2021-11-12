@@ -27,6 +27,18 @@ const updateComment=async (req: Request, res: Response)=>{
   }
 };
 
+const deleteComment=async (req: Request, res: Response)=>{
+  try {
+    const {postId}=req.body;
+    const id=req.params.id;
+    await Comment.findByIdAndDelete(id).exec();
+    await Post.findByIdAndUpdate(postId,{$pull:{comments:id}})
+    res.json({msg: "comment deleted"});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
 const likeComment=async (req: Request, res: Response)=>{
   try {
     const id=req.params.id;
@@ -54,6 +66,7 @@ const unlikeComment=async (req: Request, res: Response)=>{
 const commentController={
   createComment,
   updateComment,
+  deleteComment,
   likeComment,
   unlikeComment
 };

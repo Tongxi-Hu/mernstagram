@@ -21,6 +21,11 @@
     cursor: pointer;
 }
 
+.comments{
+    max-height: 10rem;
+    overflow-y: scroll;
+}
+
 .comment_display {
     padding: 0.3rem 1.4rem;
 }

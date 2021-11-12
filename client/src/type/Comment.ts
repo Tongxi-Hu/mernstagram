@@ -1,4 +1,3 @@
-import { UserType } from "./User";
 
 export interface CommentType {
   _id: string,

@@ -6,6 +6,7 @@ const commentRouter=express.Router();
 
 commentRouter.post("/comment", auth, commentController.createComment);
 commentRouter.patch("/comment/:id", auth, commentController.updateComment);
+commentRouter.patch("/comment/:id/delete", auth, commentController.deleteComment);
 commentRouter.patch("/comment/:id/like", auth, commentController.likeComment);
 commentRouter.patch("/comment/:id/unlike", auth, commentController.unlikeComment);
 

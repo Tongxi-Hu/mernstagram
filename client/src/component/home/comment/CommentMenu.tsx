@@ -2,6 +2,8 @@ import React, {FC} from "react";
 import {CommentType} from "../../../type/Comment";
 import {PostType} from "../../../type/Post";
 import {AuthState} from "../../../store/auth";
+import {useDispatch} from "react-redux";
+import {deleteComment} from "../../../store/comment";
 
 const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthState, setOnEdit: (onEdit: boolean)=>void }>=({
   post,
@@ -9,6 +11,11 @@ const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthSta
   authState,
   setOnEdit
 })=>{
+  const dispatch=useDispatch();
+
+  const handleDelete=()=>{
+    dispatch(deleteComment(post,comment,authState));
+  }
 
   return (
     <div>
@@ -28,7 +35,7 @@ const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthSta
                 <div className="dropdown-item" onClick={()=>setOnEdit(true)}>
                     <span className="material-icons">create</span>edit
                 </div>
-                <div className="dropdown-item">
+                <div className="dropdown-item" onClick={handleDelete}>
                     <span className="material-icons">delete_outline</span>remove
                 </div>
             </>}
