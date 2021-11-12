@@ -1,8 +1,11 @@
+import { UserType } from "./User";
+
 export interface CommentType {
   _id: string,
   content: string,
-  tag: Object,
-  reply: string,
+  tag?: string,
+  tagname?:string,
+  reply?: string,
   likes: Array<string>,
   user: string,
   username: string,

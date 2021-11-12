@@ -1,11 +1,17 @@
-import React, {FC, FormEvent, useState} from "react";
+import React, {Dispatch, FC, FormEvent, useState} from "react";
 import {PostType} from "../../type/Post";
 import {AuthState} from "../../store/auth";
 import {State} from "../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {createComment} from "../../store/comment";
 
-const InputComment: FC<{ post: PostType }>=({post, children})=>{
+const InputComment: FC<{ post: PostType, reply: string | undefined, setOnReply?: Dispatch<React.SetStateAction<boolean>>,tag?:string,tagname?:string }>=({
+  post,
+  children,
+  reply,
+  setOnReply,
+  tag,tagname
+})=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const [content, setContent]=useState("");
@@ -13,8 +19,9 @@ const InputComment: FC<{ post: PostType }>=({post, children})=>{
   const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if (!content.trim()) return;
-    dispatch(createComment(post, authState, content));
+    dispatch(createComment(post, authState, content, reply,tag,tagname));
     setContent("");
+    if (setOnReply) {setOnReply(false);}
   };
 
   return (

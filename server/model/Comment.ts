@@ -1,9 +1,11 @@
 import mongoose, {ObjectId} from "mongoose";
+import {UserType} from "./User";
 
 export interface CommentType extends mongoose.Document {
   content: string,
-  tag: Object,
-  reply: ObjectId,
+  tag?: ObjectId,
+  tagname?:string,
+  reply?: ObjectId,
   likes: Array<ObjectId>,
   user: ObjectId,
   username: string,
@@ -15,6 +17,7 @@ const commentSchema=new mongoose.Schema({
     required: true
   },
   tag: Object,
+  tagname:String,
   reply: mongoose.Types.ObjectId,
   likes: [{type: mongoose.Types.ObjectId, ref: "User"}],
   user: {type: mongoose.Types.ObjectId, ref: "User", required: true},

@@ -13,7 +13,7 @@ const PostCard: FC<{ post: PostType }>=({post})=>{
       <CardBody post={post}/>
       <CardFooter post={post}/>
       <Comments post={post}/>
-      <InputComment post={post}/>
+      <InputComment post={post} reply={undefined}/>
     </div>
   );
 };
