@@ -4,7 +4,7 @@ import {AuthState} from "./auth";
 import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
 import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {State} from "./index";
-import {POST_ACTION, POST_ACTION_TYPE} from "./post";
+import {POST_ACTION, POST_ACTION_TYPE} from "./homePost";
 import {CommentType} from "../type/Comment";
 
 const commentReducer=()=>{};

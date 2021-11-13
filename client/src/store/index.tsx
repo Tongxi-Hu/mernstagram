@@ -11,7 +11,10 @@ import darkMode, {DarkModeState} from "./theme";
 import search, {SearchState} from "./search";
 import profile from "./profile";
 import status, {STATUS} from "./status";
-import homePosts, {PostState} from "./post";
+import homePosts, {PostState} from "./homePost";
+import profilePosts, {ProfilePostsState} from "./profilePost";
+import postDetail, {PostDetailState} from "./postDetail";
+import discover, {DiscoverState} from "./discover";
 
 const reducer=combineReducers({
   auth,
@@ -20,7 +23,10 @@ const reducer=combineReducers({
   search,
   profile,
   status,
-  homePosts
+  homePosts,
+  profilePosts,
+  postDetail,
+  discover
 });
 
 export interface State {
@@ -30,7 +36,10 @@ export interface State {
   search: SearchState;
   profile: UserType,
   status: STATUS,
-  homePosts: PostState
+  homePosts: PostState,
+  profilePosts: ProfilePostsState,
+  postDetail: PostDetailState,
+  discover: DiscoverState,
 }
 
 const store=createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

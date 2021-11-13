@@ -1,6 +1,11 @@
 import React, {FC} from "react";
+import {useSelector} from "react-redux";
+import {State} from "../store";
+import {DarkModeState} from "../store/theme";
 
 const Carousel: FC<{ images: Array<string>, id: string }>=({images, id})=>{
+  const darkMode=useSelector<State, DarkModeState>(state=>state.darkMode);
+
   return (
     <div id={`image${id}`} className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-indicators">
@@ -13,7 +18,8 @@ const Carousel: FC<{ images: Array<string>, id: string }>=({images, id})=>{
       <div className="carousel-inner">
         {images.map((img, index)=>(
           <div className={"carousel-item "+(index===0 ? "active" : "")} key={index}>
-            <img src={img} className="d-block w-100" alt="..." style={{height:"15rem",objectFit:"cover"}}/>
+            <img src={img} className="d-block w-100" alt="..."
+              style={{height: "15rem", objectFit: "contain", filter: darkMode.darkMode ? "invert(1)" : "invert(0"}}/>
           </div>
         ))}
         <button className="carousel-control-prev" type="button" data-bs-target={`#image${id}`}

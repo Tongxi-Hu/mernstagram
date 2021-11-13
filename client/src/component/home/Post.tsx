@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {getPosts, PostState} from "../../store/post";
+import {getPosts, PostState} from "../../store/homePost";
 import {AuthState} from "../../store/auth";
 import {useDispatch, useSelector} from "react-redux";
 import {State} from "../../store";

@@ -1,18 +1,30 @@
 import React, {FC} from "react";
 import {PostType} from "../../../type/Post";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import moment from "moment";
 import {AuthState} from "../../../store/auth";
 import {State} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {openEditPost} from "../../../store/status";
+import {deletePost} from "../../../store/homePost";
 
 const CardHeader: FC<{ post: PostType }>=({post})=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const dispatch=useDispatch();
+  const history=useHistory();
 
   const handleEditClick=()=>{
     dispatch(openEditPost(post));
+
+  };
+
+  const handleDeleteClick=()=>{
+    dispatch(deletePost(post, authState));
+    history.replace("/");
+  };
+
+  const handleCopyClick=()=>{
+    navigator.clipboard.writeText(`http://localhost:3000/post/${post._id}`);
   };
 
   return (
@@ -36,13 +48,13 @@ const CardHeader: FC<{ post: PostType }>=({post})=>{
                 <div className="dropdown-item" onClick={handleEditClick}>
                     <span className="material-icons">create</span>edit
                 </div>
-                <div className="dropdown-item">
+                <div className="dropdown-item" onClick={handleDeleteClick}>
                     <span className="material-icons">delete_outline</span>delete
                 </div>
             </>
           }
           <div className="dropdown-item">
-            <span className="material-icons">content_copy</span>copy link
+            <span className="material-icons" onClick={handleCopyClick}>content_copy</span>copy link
           </div>
         </div>
       </div>

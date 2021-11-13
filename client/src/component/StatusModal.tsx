@@ -4,7 +4,7 @@ import {closeModal, STATUS} from "../store/status";
 import {AuthState} from "../store/auth";
 import {State} from "../store";
 import {notifyFail} from "../store/notify";
-import {createPost, updatePost} from "../store/post";
+import {createPost, updatePost} from "../store/homePost";
 
 const StatusModal=()=>{
   const dispatch=useDispatch();

@@ -1,24 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {State} from "../../store";
+import React, {FC, useState} from "react";
 import {AuthState} from "../../store/auth";
-import {getProfile} from "../../store/profile";
 import {UserType} from "../../type/User";
 import Avatar from "../Avatar";
 import EditProfile from "./EditProfile";
 import FollowButton from "./FollowButton";
+import {useSelector} from "react-redux";
+import {State} from "../../store";
 
-const Info=()=>{
-  const dispatch=useDispatch();
-  const authState=useSelector<State, AuthState>(state=>state.auth);
-  const {id}=useParams<{ id: string }>();
-  const profile=useSelector<State, UserType>(state=>state.profile);
+const Info: FC<{authState: AuthState }>=({ authState})=>{
   const [onEdit, setOnEdit]=useState(false);
+  const profile=useSelector<State, UserType>(state=>state.profile);
 
-  useEffect(()=>{
-    dispatch(getProfile(id, authState.token));
-  }, [dispatch, authState.token, id]);
   return (
     <div className="info">
       {profile &&
@@ -45,7 +37,7 @@ const Info=()=>{
                   </div>
                   <p className="m-0">{profile.address}</p>
                   <p className="m-0">{profile.email}</p>
-                  <a href={profile.website} target="_blank" rel="noreferrer">{profile.website.slice(0,35)+"..."}</a>
+                  <a href={profile.website} target="_blank" rel="noreferrer">{profile.website.slice(0, 35)+"..."}</a>
                   <p>{profile.story}</p>
               </div>
           </div>

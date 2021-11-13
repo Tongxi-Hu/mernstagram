@@ -1,6 +1,25 @@
 import Post from "../model/Post";
 import {Request, Response} from "express";
-import {CommentType} from "../model/Comment";
+import Comment, {CommentType} from "../model/Comment";
+import {Query} from "mongoose";
+
+class APIFeatures {
+  public query: Query<any, any>;
+  public queryString: { page: string, limit: string };
+
+  constructor(query: Query<any, any>, queryString: { page: string, limit: string }) {
+    this.query=query;
+    this.queryString=queryString;
+  }
+
+  paginating() {
+    const page=Number(this.queryString.page) || 1;
+    const limit=Number(this.queryString.limit) || 3;
+    const skip=(page-1)*limit;
+    this.query=this.query.skip(skip).limit(limit);
+    return this;
+  }
+}
 
 const createPost=async (req: Request, res: Response)=>{
   try {
@@ -17,11 +36,25 @@ const createPost=async (req: Request, res: Response)=>{
 
 const getPosts=async (req: Request, res: Response)=>{
   try {
+
     // @ts-ignore
     const posts=await Post.find({user: [...req.user.following, req.user._id]})
                           .populate<{ comments: Array<CommentType> }>("comments")
                           .sort("-createdAt");
     res.json({msg: "new posts", result: posts.length, posts});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const getPostDetail=async (req: Request, res: Response)=>{
+  const id=req.params.id;
+  try {
+    const post=await Post.findById(id)
+                         .populate<{ comments: Array<CommentType> }>("comments")
+                         .sort("-createdAt");
+    if (!post) return res.status(400).json({msg: "post not found"});
+    res.json({msg: "post detail found", post});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
   }
@@ -33,7 +66,20 @@ const updatePost=async (req: Request, res: Response)=>{
     const {content, images}=req.body;
     if (images.length===0) return res.status(500).json({msg: "please add your photo"});
     const updatedPost=await Post.findByIdAndUpdate(id, {content, images}).exec();
+    if (!updatedPost) return res.status(400).json({msg: "post not found"});
     res.json({msg: "post updated", updatedPost});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const deletePost=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const post=await Post.findOneAndDelete({_id: req.params.id, user: req.user._id});
+    if (!post) return res.status(400).json({msg: "post not found"});
+    await Comment.deleteMany({_id: {$in: post.comments}});
+    return res.json({msg: "post deleted"});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
   }
@@ -44,6 +90,7 @@ const likePost=async (req: Request, res: Response)=>{
     const id=req.params.id;
     const {likes}=req.body;
     const updatedPost=await Post.findByIdAndUpdate(id, {likes}).exec();
+    if (!updatedPost) return res.status(400).json({msg: "post not found"});
     res.json({msg: "post liked", updatedPost});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
@@ -54,7 +101,32 @@ const unLikePost=async (req: Request, res: Response)=>{
     const id=req.params.id;
     const {likes}=req.body;
     const updatedPost=await Post.findByIdAndUpdate(id, {likes}).exec();
+    if (!updatedPost) return res.status(400).json({msg: "post not found"});
     res.json({msg: "post unliked", updatedPost});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const getUserPosts=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const posts=await Post.find({user: req.params.id}).populate<{ comments: Array<CommentType> }>("comments")
+                          .sort("-createdAt");
+    res.json({msg: "users posts", posts});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const getPostsDiscover=async (req: Request, res: Response)=>{
+  try {
+
+    // @ts-ignore
+    const features=new APIFeatures(Post.find({user: {$nin: [...req.user.following, req.user._id]}}), req.query).paginating();
+    const posts=await features.query.populate<{ comments: Array<CommentType> }>("comments")
+                              .sort("-createdAt");
+    res.json({msg: "posts discovered", posts});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
   }
@@ -63,9 +135,13 @@ const unLikePost=async (req: Request, res: Response)=>{
 const postController={
   createPost,
   getPosts,
+  getPostDetail,
   updatePost,
+  deletePost,
   likePost,
-  unLikePost
+  unLikePost,
+  getUserPosts,
+  getPostsDiscover
 };
 
 export default postController;

@@ -6,7 +6,7 @@ import LikeButton from "../../LikeButton";
 import {useDispatch, useSelector} from "react-redux";
 import {AuthState} from "../../../store/auth";
 import {State} from "../../../store";
-import {likePost, unLikePost} from "../../../store/post";
+import {likePost, unLikePost} from "../../../store/homePost";
 
 const CardFooter: FC<{ post: PostType }>=({post})=>{
   const dispatch=useDispatch();

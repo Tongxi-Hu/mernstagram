@@ -5,6 +5,7 @@ import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
 import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {uploadImage} from "../util/uploadImage";
 import {AUTH_ACTION, AUTH_ACTION_TYPE} from "./auth";
+import {PROFILE_POST_ACTION, PROFILE_POST_ACTION_TYPE} from "./profilePost";
 
 enum PROFILE_ACTION_TYPE {
   GET_PROFIlE="GET_PROFILE",
@@ -28,10 +29,12 @@ const profileReducer=(state: UserType | null=null, action: PROFILE_ACTION): (Use
 };
 
 export const getProfile=(id: string,
-  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION>=>async (dispatch)=>{
+  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | PROFILE_POST_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await getDataAPI("user/"+id, token);
+    const res1=await getDataAPI("user_post/"+id, token);
+    dispatch({type: PROFILE_POST_ACTION_TYPE.PROFILE_POST_ACTION_GET, payload: res1.data.posts});
     dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res.data.user});
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
   } catch (e: any) {

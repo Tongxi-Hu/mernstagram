@@ -4,9 +4,15 @@ import Post from "../model/Post";
 
 const createComment=async (req: Request, res: Response)=>{
   try {
-    const {postId, content,reply,tag,tagname}=req.body;
+    const {postId, content, reply, tag, tagname}=req.body;
+    const post=await Post.findById(postId);
+    if (!post) return res.status(400).json({msg: "post not found"});
+    if (reply) {
+      const comment=await Comment.findById(reply);
+      if (!comment) return res.status(400).json({msg: "comment not found"});
+    }
     // @ts-ignore
-    const newComment=new Comment({user: req.user._id, content, reply, username: req.user.username,tag,tagname});
+    const newComment=new Comment({user: req.user._id, content, reply, username: req.user.username, tag, tagname});
     await Post.findByIdAndUpdate(postId, {$push: {comments: newComment._id}}, {new: true});
     await newComment.save();
     res.json({newComment, msg: "comment created"});
@@ -32,7 +38,7 @@ const deleteComment=async (req: Request, res: Response)=>{
     const {postId}=req.body;
     const id=req.params.id;
     await Comment.findByIdAndDelete(id).exec();
-    await Post.findByIdAndUpdate(postId,{$pull:{comments:id}})
+    await Post.findByIdAndUpdate(postId, {$pull: {comments: id}});
     res.json({msg: "comment deleted"});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
@@ -43,7 +49,7 @@ const likeComment=async (req: Request, res: Response)=>{
   try {
     const id=req.params.id;
     // @ts-ignore
-    const likedComment=await Comment.findByIdAndUpdate(id, {$push:{likes: req.user._id}},{new:true});
+    const likedComment=await Comment.findByIdAndUpdate(id, {$push: {likes: req.user._id}}, {new: true});
     if (!likedComment) return res.status(400).json({msg: "no comment found"});
     res.json({msg: "comment liked"});
   } catch (e: any) {
@@ -55,7 +61,7 @@ const unlikeComment=async (req: Request, res: Response)=>{
   try {
     const id=req.params.id;
     // @ts-ignore
-    const likedComment=await Comment.findByIdAndUpdate(id, {$pull:{likes: req.user._id}},{new:true});
+    const likedComment=await Comment.findByIdAndUpdate(id, {$pull: {likes: req.user._id}}, {new: true});
     if (!likedComment) return res.status(400).json({msg: "no comment found"});
     res.json({msg: "comment unliked"});
   } catch (e: any) {
