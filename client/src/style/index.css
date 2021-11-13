@@ -1,3 +1,14 @@
+@import url("./auth.css");
+@import url("./loading.css");
+@import url("./header.css");
+@import url("./avatar.css");
+@import url("./profile.css");
+@import url("./home.css");
+@import url("./status_modal.css");
+@import url("./comments.css");
+@import url("./post_thumb.css");
+@import url("./user_card.css");
+
 * {
     padding: 0;
     box-sizing: border-box;
@@ -34,14 +45,3 @@ p {
 .card:hover {
     cursor: pointer;
 }
-
-@import url("./auth.css");
-@import url("./loading.css");
-@import url("./header.css");
-@import url("./avatar.css");
-@import url("./profile.css");
-@import url("./home.css");
-@import url("./status_modal.css");
-@import url("./comments.css");
-@import url("./post_thumb.css");
-@import url("./user_card.css");
