@@ -5,7 +5,7 @@ import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
 import {getDataAPI} from "../util/fetchData";
 import {AxiosResponse} from "axios";
 
-enum SEARCH_ACTION_TYPE {
+export enum SEARCH_ACTION_TYPE {
   SEARCH_USER="SEARCH_USER",
   SEARCH_CLEAR="SEARCH_CLEAR",
 }

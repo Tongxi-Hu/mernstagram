@@ -53,7 +53,7 @@ const userSchema:Schema=new mongoose.Schema({
   website: {type: String, default: ""},
   followers: [{type: mongoose.Types.ObjectId, ref: "User"}],
   following: [{type: mongoose.Types.ObjectId, ref: "User"}],
-  saved: [{type: mongoose.Types.ObjectId, ref: "user"}]
+  saved: [{type: mongoose.Types.ObjectId, ref: "Post"}]
 }, {timestamps: true});
 
 export default mongoose.model<UserType>("User", userSchema);

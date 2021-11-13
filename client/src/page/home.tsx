@@ -5,6 +5,7 @@ import {State} from "../store";
 import {AuthState} from "../store/auth";
 import Status from "../component/home/Status";
 import Post from "../component/home/Post";
+import RightSideBar from "../component/home/RightSideBar";
 
 const Home=()=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
@@ -19,7 +20,8 @@ const Home=()=>{
         <Status/>
         <Post/>
       </div>
-      <div className="col-md-4">
+      <div className="col-md-4 mt-4">
+        <RightSideBar/>
       </div>
     </div>
   );

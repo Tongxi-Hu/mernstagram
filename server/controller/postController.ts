@@ -2,6 +2,7 @@ import Post from "../model/Post";
 import {Request, Response} from "express";
 import Comment, {CommentType} from "../model/Comment";
 import {Query} from "mongoose";
+import User from "../model/User";
 
 class APIFeatures {
   public query: Query<any, any>;
@@ -108,6 +109,28 @@ const unLikePost=async (req: Request, res: Response)=>{
   }
 };
 
+const savePost=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const save=await User.findByIdAndUpdate(req.user._id, {$push: {saved: req.params.id}});
+    if (!save) return res.status(400).json({msg: "user not exist"});
+    return res.json({msg: "post saved"});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
+const unSavePost=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const unSave=await User.findByIdAndUpdate(req.user._id, {$pull: {saved: req.params.id}});
+    if (!unSave) return res.status(400).json({msg: "user not exist"});
+    return res.json({msg: "post unSaved"});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
 const getUserPosts=async (req: Request, res: Response)=>{
   try {
     // @ts-ignore
@@ -140,6 +163,8 @@ const postController={
   deletePost,
   likePost,
   unLikePost,
+  savePost,
+  unSavePost,
   getUserPosts,
   getPostsDiscover
 };

@@ -6,12 +6,13 @@ import LikeButton from "../../LikeButton";
 import {useDispatch, useSelector} from "react-redux";
 import {AuthState} from "../../../store/auth";
 import {State} from "../../../store";
-import {likePost, unLikePost} from "../../../store/homePost";
+import {likePost, savePost, unLikePost, unSavePost} from "../../../store/homePost";
 
 const CardFooter: FC<{ post: PostType }>=({post})=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const [isLike, setIsLike]=useState(false);
+  const [isSaved, setIsSaved]=useState(false);
 
   const handleLike=()=>{
     dispatch(likePost(post, authState));
@@ -20,13 +21,26 @@ const CardFooter: FC<{ post: PostType }>=({post})=>{
     dispatch(unLikePost(post, authState));
   };
 
+  const handleSave=()=>{
+    dispatch(savePost(post, authState));
+  };
+
+  const handleUnSave=()=>{
+    dispatch(unSavePost(post, authState));
+  };
+
   useEffect(()=>{
     if (post.likes.find(like=>like===authState.user?._id)) {
       setIsLike(true);
     } else {
       setIsLike(false);
     }
-  }, [post.likes, authState.user?._id]);
+    if (authState.user?.saved.find(saved=>saved===post._id)) {
+      setIsSaved(true);
+    } else {
+      setIsSaved(false);
+    }
+  }, [post.likes,post._id, authState.user?.saved,authState.user?._id]);
   return (
     <div className="card_footer">
       <div className="card_icon_menu">
@@ -37,7 +51,8 @@ const CardFooter: FC<{ post: PostType }>=({post})=>{
           </Link>
           <img src={Send} alt="Send"/>
         </div>
-        <i className="far fa-bookmark"/>
+        {isSaved ? <i className="fas fa-bookmark text-success" onClick={handleUnSave}/>
+          : <i className="far fa-bookmark" onClick={handleSave}/>}
       </div>
       <div className="footer_info">
         <h6>{post.likes.length} likes</h6>

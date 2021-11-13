@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 
 const searchUser=async (req: Request, res: Response)=>{
   try {
-    const users=await User.find({username: {$regex: `${req.query.username}`, $options: "i"}}).limit(10);
+    const users=await User.find({username: {$regex: `${req.query.username}`, $options: "i"}}).limit(3);
     res.json({msg: "meet new friends!", users});
   } catch (e: any) {
     return res.status(500).json({msg: e.message});
@@ -59,12 +59,24 @@ const unfollow=async (req: Request, res: Response)=>{
   }
 };
 
+const suggestUser=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const notIn=[...req.user.following, req.user._id];
+    const users=await User.aggregate([{$match: {_id: {$nin: notIn}}}, {$sample: {size: 3}}]);
+    return res.json({msg: "new users found", users});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
 const userController={
   searchUser,
   getUserInfo,
   updateUser,
   follow,
-  unfollow
+  unfollow,
+  suggestUser
 };
 
 export default userController;

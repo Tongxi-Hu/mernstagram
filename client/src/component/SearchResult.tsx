@@ -7,7 +7,7 @@ import UserCard from "./UserCard";
 const SearchResult=()=>{
   const users=useSelector<State, SearchState>(state=>state.search);
   return (
-    <div className="offcanvas offcanvas-start" tabIndex={-1} id="offcanvasExample"
+    <div className={`offcanvas offcanvas-start`} tabIndex={-1} id="offcanvasExample"
       aria-labelledby="offcanvasExampleLabel">
       <div className="offcanvas-header">
         <h5 className="offcanvas-title text-info" id="offcanvasExampleLabel">What's new</h5>
@@ -15,7 +15,6 @@ const SearchResult=()=>{
           aria-label="Close"/>
       </div>
       <div className="offcanvas-body">
-
         {users.map(user=>(
           <UserCard user={user} key={user._id}/>
         ))}

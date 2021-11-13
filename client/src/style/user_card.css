@@ -1,0 +1,8 @@
+.user_card {
+    height: 7.6rem;
+    overflow: hidden;
+}
+
+.card-title{
+    text-wrap: none;
+}

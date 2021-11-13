@@ -12,6 +12,7 @@ const Search=()=>{
   const handleSearch=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     dispatch(searchUser(search, authState.token));
+    setSearch("");
   };
 
   return (

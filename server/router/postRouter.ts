@@ -11,6 +11,8 @@ postRouter.patch("/post/:id", auth, postController.updatePost);
 postRouter.delete("/post/:id", auth, postController.deletePost);
 postRouter.patch("/post/:id/like", auth, postController.likePost);
 postRouter.patch("/post/:id/unlike", auth, postController.unLikePost);
+postRouter.patch("/post/:id/save", auth, postController.savePost);
+postRouter.patch("/post/:id/unsave", auth, postController.unSavePost);
 postRouter.get("/user_post/:id", auth, postController.getUserPosts);
 postRouter.get("/post_discover", auth, postController.getPostsDiscover);
 

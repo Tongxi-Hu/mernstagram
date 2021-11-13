@@ -22,7 +22,7 @@ const PostDetail=()=>{
       position: "fixed",
       top: "0",
       left: "0",
-      padding: "4rem 10%",
+      padding: "5rem 10%",
       width: "90%",
       height: "100vh",
       overflowY: "scroll",

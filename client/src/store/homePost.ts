@@ -1,4 +1,4 @@
-import {AuthState} from "./auth";
+import {AUTH_ACTION, AUTH_ACTION_TYPE, AuthState} from "./auth";
 import {ThunkAction} from "redux-thunk";
 import {State} from "./index";
 import {NOTIFY_ACTION, NOTIFY_ACTION_TYPE} from "./notify";
@@ -85,7 +85,7 @@ export const deletePost=(post: PostType,
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await deleteDataAPI("post/"+post._id, authState.token);
-    const res1=await getDataAPI("post",authState.token);
+    const res1=await getDataAPI("post", authState.token);
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     const postDetail=getState().postDetail;
     if (postDetail?._id===post._id) dispatch({type: POST_DETAIL_ACTION_TYPE.POST_DETAIL_ACTION_CLEAR});
@@ -120,6 +120,34 @@ export const unLikePost=(post: PostType,
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     const res2=await getDataAPI("post/"+post._id, authState.token);
     dispatch({type: POST_DETAIL_ACTION_TYPE.POST_DETAIL_ACTION_GET, payload: res2.data.post});
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+  } catch (e: any) {
+    dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
+  }
+};
+
+export const savePost=(post: PostType,
+  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION |AUTH_ACTION>=>async (dispatch)=>{
+  try {
+    dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
+    const res=await patchDataAPI("post/"+post._id+"/save", authState.token, null);
+    const res1=await postDataAPI("refresh_token", "", "");
+    dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res1.data.access_token, user: res1.data.user}});
+    localStorage.setItem("mernstagram", res1.data.access_token);
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+  } catch (e: any) {
+    dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
+  }
+};
+
+export const unSavePost=(post: PostType,
+  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION | AUTH_ACTION>=>async (dispatch)=>{
+  try {
+    dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
+    const res=await patchDataAPI("post/"+post._id+"/unsave", authState.token, null);
+    const res1=await postDataAPI("refresh_token", "", "");
+    dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res1.data.access_token, user: res1.data.user}});
+    localStorage.setItem("mernstagram", res1.data.access_token);
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});

@@ -39,8 +39,8 @@ export const getPost=(id: string,
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await getDataAPI("post/"+id, authState.token);
-    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     dispatch({type: POST_DETAIL_ACTION_TYPE.POST_DETAIL_ACTION_GET, payload: res.data.post});
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
   } catch (e: any) {
     dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
   }
