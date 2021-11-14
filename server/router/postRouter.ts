@@ -15,5 +15,6 @@ postRouter.patch("/post/:id/save", auth, postController.savePost);
 postRouter.patch("/post/:id/unsave", auth, postController.unSavePost);
 postRouter.get("/user_post/:id", auth, postController.getUserPosts);
 postRouter.get("/post_discover", auth, postController.getPostsDiscover);
+postRouter.get("/saved", auth, postController.getSavedPosts);
 
 export default postRouter;

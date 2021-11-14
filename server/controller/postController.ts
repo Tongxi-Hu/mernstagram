@@ -142,6 +142,18 @@ const getUserPosts=async (req: Request, res: Response)=>{
   }
 };
 
+const getSavedPosts=async (req: Request, res: Response)=>{
+  try {
+    // @ts-ignore
+    const user=await User.findById(req.user._id);
+    if (!user) return res.status(400).json({msg: "user not exist"});
+    const posts=await Post.find({_id: {$in: user.saved}});
+    res.json({msg: "saved posts", posts});
+  } catch (e: any) {
+    return res.status(500).json({msg: e.message});
+  }
+};
+
 const getPostsDiscover=async (req: Request, res: Response)=>{
   try {
 
@@ -166,6 +178,7 @@ const postController={
   savePost,
   unSavePost,
   getUserPosts,
+  getSavedPosts,
   getPostsDiscover
 };
 
