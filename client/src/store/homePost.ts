@@ -6,6 +6,7 @@ import {uploadImage} from "../util/uploadImage";
 import {deleteDataAPI, getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {PostType} from "../type/Post";
 import {POST_DETAIL_ACTION, POST_DETAIL_ACTION_TYPE} from "./postDetail";
+import {Socket} from "socket.io-client";
 
 export enum POST_ACTION_TYPE {
   GET_POST="GET_POST",
@@ -58,6 +59,16 @@ export const getPosts=(token: string): ThunkAction<any, State, any, NOTIFY_ACTIO
   }
 };
 
+export const getPostsInBackground=(token: string): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
+  try {
+    const res=await getDataAPI("post", token);
+    dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res.data.posts});
+    dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+  } catch (e: any) {
+    dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
+  }
+};
+
 export const updatePost=(content: string, images: Array<File>,
   authState: AuthState,
   id: string): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION | POST_DETAIL_ACTION>=>async (dispatch)=>{
@@ -97,11 +108,13 @@ export const deletePost=(post: PostType,
 };
 
 export const likePost=(post: PostType,
-  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION | POST_DETAIL_ACTION>=>async (dispatch)=>{
+  authState: AuthState,
+  socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION | POST_DETAIL_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("post/"+post._id+"/like", authState.token, {likes: [...post.likes, authState.user?._id]});
     const res1=await getDataAPI("post", authState.token);
+    socket.emit("likePost", post._id);
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     const res2=await getDataAPI("post/"+post._id, authState.token);
     dispatch({type: POST_DETAIL_ACTION_TYPE.POST_DETAIL_ACTION_GET, payload: res2.data.post});
@@ -112,11 +125,13 @@ export const likePost=(post: PostType,
 };
 
 export const unLikePost=(post: PostType,
-  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION | POST_DETAIL_ACTION>=>async (dispatch)=>{
+  authState: AuthState,
+  socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION | POST_DETAIL_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("post/"+post._id+"/unlike", authState.token, {likes: post.likes.filter(like=>like!==authState.user?._id)});
     const res1=await getDataAPI("post", authState.token);
+    socket.emit("unlikePost", post._id);
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     const res2=await getDataAPI("post/"+post._id, authState.token);
     dispatch({type: POST_DETAIL_ACTION_TYPE.POST_DETAIL_ACTION_GET, payload: res2.data.post});
@@ -127,7 +142,7 @@ export const unLikePost=(post: PostType,
 };
 
 export const savePost=(post: PostType,
-  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION |AUTH_ACTION>=>async (dispatch)=>{
+  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION | AUTH_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("post/"+post._id+"/save", authState.token, null);

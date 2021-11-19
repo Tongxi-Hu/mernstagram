@@ -6,6 +6,7 @@ import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {uploadImage} from "../util/uploadImage";
 import {AUTH_ACTION, AUTH_ACTION_TYPE} from "./auth";
 import {PROFILE_POST_ACTION, PROFILE_POST_ACTION_TYPE} from "./profilePost";
+import {Socket} from "socket.io-client";
 
 enum PROFILE_ACTION_TYPE {
   GET_PROFIlE="GET_PROFILE",
@@ -63,12 +64,14 @@ export const updateUserProfile=(userData: UserType, avatar: File,
 };
 
 export const followUser=(id: string,
-  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
+  token: string,
+  socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("user/"+id+"/follow", token, null);
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     const res1=await getDataAPI("user/"+id, token);
+    socket.emit("follow", id);
     dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res1.data.user});
     const res2=await postDataAPI("refresh_token", "", "");
     dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res2.data.access_token, user: res2.data.user}});
@@ -79,12 +82,14 @@ export const followUser=(id: string,
 };
 
 export const unfollowUser=(id: string,
-  token: string): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
+  token: string,
+  socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | PROFILE_ACTION | AUTH_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("user/"+id+"/unfollow", token, null);
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
     const res1=await getDataAPI("user/"+id, token);
+    socket.emit("follow", id);
     dispatch({type: PROFILE_ACTION_TYPE.GET_PROFIlE, payload: res1.data.user});
     const res2=await postDataAPI("refresh_token", "", "");
     dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res2.data.access_token, user: res2.data.user}});

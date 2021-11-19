@@ -15,6 +15,7 @@ import homePosts, {PostState} from "./homePost";
 import profilePosts, {ProfilePostsState} from "./profilePost";
 import postDetail, {PostDetailState} from "./postDetail";
 import discover, {DiscoverState} from "./discover";
+import socket, {SocketState} from "./socket";
 
 const reducer=combineReducers({
   auth,
@@ -26,7 +27,8 @@ const reducer=combineReducers({
   homePosts,
   profilePosts,
   postDetail,
-  discover
+  discover,
+  socket
 });
 
 export interface State {
@@ -40,6 +42,7 @@ export interface State {
   profilePosts: ProfilePostsState,
   postDetail: PostDetailState,
   discover: DiscoverState,
+  socket:SocketState
 }
 
 const store=createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

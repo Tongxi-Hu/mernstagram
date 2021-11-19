@@ -7,18 +7,20 @@ import {useDispatch, useSelector} from "react-redux";
 import {AuthState} from "../../../store/auth";
 import {State} from "../../../store";
 import {likePost, savePost, unLikePost, unSavePost} from "../../../store/homePost";
+import {SocketState} from "../../../store/socket";
 
 const CardFooter: FC<{ post: PostType }>=({post})=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
+  const socket=useSelector<State, SocketState>(state=>state.socket);
   const [isLike, setIsLike]=useState(false);
   const [isSaved, setIsSaved]=useState(false);
 
   const handleLike=()=>{
-    dispatch(likePost(post, authState));
+    if (socket) dispatch(likePost(post, authState, socket));
   };
   const handleUnLike=()=>{
-    dispatch(unLikePost(post, authState));
+    if (socket) dispatch(unLikePost(post, authState, socket));
   };
 
   const handleSave=()=>{
@@ -40,7 +42,7 @@ const CardFooter: FC<{ post: PostType }>=({post})=>{
     } else {
       setIsSaved(false);
     }
-  }, [post.likes,post._id, authState.user?.saved,authState.user?._id]);
+  }, [post.likes, post._id, authState.user?.saved, authState.user?._id]);
   return (
     <div className="card_footer">
       <div className="card_icon_menu">

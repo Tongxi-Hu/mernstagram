@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
-import jwt, {JwtPayload, VerifyErrors} from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import {Request, Response} from "express";
 
 import User from "../model/User";
-import {ObjectId} from "mongoose";
 
 const createAccessToken=(payload: Object)=>{
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {expiresIn: "1d"});

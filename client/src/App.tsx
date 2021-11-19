@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import io from "socket.io-client";
 
 import PageRender from "./customRouter/PageRender";
 import Login from "./page/login";
@@ -15,22 +16,27 @@ import {DarkModeState} from "./store/theme";
 import {NotifyState} from "./store/notify";
 import {STATUS} from "./store/status";
 import StatusModal from "./component/StatusModal";
+import {SOCKET_ACTION_TYPE} from "./store/socket";
+import SocketClient from "./SocketClient";
 
 function App() {
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const darkMode=useSelector<State, DarkModeState>(state=>state.darkMode);
-  const status=useSelector<State, STATUS>(state=>state.status)
+  const status=useSelector<State, STATUS>(state=>state.status);
   const notify=useSelector<State, NotifyState>(state=>state.notify);
   const [display, setDisplay]=useState(false);
 
   useEffect(()=>{
     dispatch(refreshToken());
+    const socket=io();
+    dispatch({type: SOCKET_ACTION_TYPE.SOCKET_CONNECT, payload: socket});
+    return ()=>{socket.close();};
   }, [dispatch]);
 
   useEffect(()=>{
     setDisplay(true);
-    if(notify.loading) return;
+    if (notify.loading) return;
     setTimeout(()=>{
       setDisplay(false);
     }, 1000);
@@ -44,7 +50,8 @@ function App() {
         <SearchResult/>
         <div className="main">
           {authState.token && <Header/>}
-          {status.modal&&<StatusModal/>}
+          {status.modal && <StatusModal/>}
+          {authState.token && <SocketClient/>}
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>

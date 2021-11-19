@@ -4,6 +4,7 @@ import {AuthState} from "../../store/auth";
 import {State} from "../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {createComment} from "../../store/comment";
+import {SocketState} from "../../store/socket";
 
 const InputComment: FC<{ post: PostType, reply: string | undefined, setOnReply?: Dispatch<React.SetStateAction<boolean>>,tag?:string,tagname?:string }>=({
   post,
@@ -14,12 +15,13 @@ const InputComment: FC<{ post: PostType, reply: string | undefined, setOnReply?:
 })=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
+  const socket=useSelector<State, SocketState>(state=>state.socket);
   const [content, setContent]=useState("");
 
   const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if (!content.trim()) return;
-    dispatch(createComment(post, authState, content, reply,tag,tagname));
+    if(socket) dispatch(createComment(post, authState, content, reply,tag,tagname,socket));
     setContent("");
     if (setOnReply) {setOnReply(false);}
   };

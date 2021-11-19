@@ -6,16 +6,19 @@ import {getDataAPI, patchDataAPI, postDataAPI} from "../util/fetchData";
 import {State} from "./index";
 import {POST_ACTION, POST_ACTION_TYPE} from "./homePost";
 import {CommentType} from "../type/Comment";
+import {Socket} from "socket.io-client";
 
 const commentReducer=()=>{};
 
 export const createComment=(post: PostType, authState: AuthState,
   content: string, reply: string | undefined, tag: string | undefined,
-  tagname: string | undefined): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
+  tagname: string | undefined,
+  socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await postDataAPI("comment", authState.token, {postId: post._id, content, reply, tag, tagname});
     const res1=await getDataAPI("post", authState.token);
+    socket.emit("createComment", post._id);
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
   } catch (e: any) {
@@ -37,11 +40,12 @@ export const updateComment=(newContent: string, comment: CommentType, authState:
 };
 
 export const deleteComment=(post: PostType, comment: CommentType,
-  authState: AuthState): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
+  authState: AuthState, socket: Socket): ThunkAction<any, State, any, NOTIFY_ACTION | POST_ACTION>=>async (dispatch)=>{
   try {
     dispatch({type: NOTIFY_ACTION_TYPE.LOADING});
     const res=await patchDataAPI("comment/"+comment._id+"/delete", authState.token, {postId: post._id});
     const res1=await getDataAPI("post", authState.token);
+    socket.emit("deleteComment", post._id);
     dispatch({type: POST_ACTION_TYPE.GET_POST, payload: res1.data.posts});
     dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
   } catch (e: any) {

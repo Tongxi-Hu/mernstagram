@@ -11,7 +11,7 @@ export enum AUTH_ACTION_TYPE {
   LOGIN="LOGIN",
   REGISTER="REGISTER",
   LOGOUT="LOGOUT"
-};
+}
 
 type AUTH_ACTION_LOGIN={
   type: AUTH_ACTION_TYPE.LOGIN;
@@ -101,6 +101,18 @@ export const refreshToken=(): ThunkAction<any, State, any, AUTH_ACTION | NOTIFY_
       dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res.data.access_token, user: res.data.user}});
       localStorage.setItem("mernstagram", res.data.access_token);
       dispatch({type: NOTIFY_ACTION_TYPE.SUCCESS, payload: res.data.msg});
+    } catch (e: any) {
+      dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
+    }
+  }
+};
+export const getAuthInBackground=(): ThunkAction<any, State, any, AUTH_ACTION | NOTIFY_ACTION>=>async (dispatch)=>{
+  const oldToken=localStorage.getItem("mernstagram");
+  if (oldToken) {
+    try {
+      const res=await postDataAPI("refresh_token", "", "");
+      dispatch({type: AUTH_ACTION_TYPE.LOGIN, payload: {token: res.data.access_token, user: res.data.user}});
+      localStorage.setItem("mernstagram", res.data.access_token);
     } catch (e: any) {
       dispatch({type: NOTIFY_ACTION_TYPE.FAIL, payload: e.response.data.msg});
     }

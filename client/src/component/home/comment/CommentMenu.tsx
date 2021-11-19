@@ -2,8 +2,10 @@ import React, {FC} from "react";
 import {CommentType} from "../../../type/Comment";
 import {PostType} from "../../../type/Post";
 import {AuthState} from "../../../store/auth";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {deleteComment} from "../../../store/comment";
+import {SocketState} from "../../../store/socket";
+import {State} from "../../../store";
 
 const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthState, setOnEdit: (onEdit: boolean)=>void }>=({
   post,
@@ -12,10 +14,12 @@ const CommentMenu: FC<{ comment: CommentType, post: PostType, authState: AuthSta
   setOnEdit
 })=>{
   const dispatch=useDispatch();
+  const socket=useSelector<State, SocketState>(state=>state.socket);
 
   const handleDelete=()=>{
-    dispatch(deleteComment(post,comment,authState));
-  }
+    if (!socket) return;
+    dispatch(deleteComment(post, comment, authState, socket));
+  };
 
   return (
     <div>
