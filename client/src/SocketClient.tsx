@@ -4,6 +4,7 @@ import {AuthState, getAuthInBackground} from "./store/auth";
 import {State} from "./store";
 import {SocketState} from "./store/socket";
 import {getPostsInBackground} from "./store/homePost";
+import {getNotify} from "./store/update";
 
 const SocketClient=()=>{
   const dispatch=useDispatch();
@@ -15,7 +16,6 @@ const SocketClient=()=>{
   useEffect(()=>{
     if (!socket) return;
     socket.on("likeToClient", ()=>{
-      console.log("likeToClient");
       dispatch(getPostsInBackground(authState.token));
     });
     return ()=>{socket.off("likeToClient");};
@@ -63,6 +63,22 @@ const SocketClient=()=>{
       dispatch(getAuthInBackground());
     });
     return ()=>{socket.off("unfollowToClient");};
+  }, [socket, dispatch, authState]);
+
+  useEffect(()=>{
+    if (!socket) return;
+    socket.on("createNotifyToClient", ()=>{
+      dispatch(getNotify(authState, socket));
+    });
+    return ()=>{socket.off("createNotifyToClient");};
+  }, [socket, dispatch, authState]);
+
+  useEffect(()=>{
+    if (!socket) return;
+    socket.on("deleteNotifyToClient", ()=>{
+      dispatch(getNotify(authState, socket));
+    });
+    return ()=>{socket.off("deleteNotifyToClient");};
   }, [socket, dispatch, authState]);
   return (
     <>

@@ -5,7 +5,10 @@ import User, {UserType} from "./model/User";
 const users: Array<{ id: string, socketId: string }>=[];
 const SocketServer=(socket: Socket)=>{
   socket.on("joinUser", id=>{
-    users.push({id, socketId: socket.id});
+    const i=users.findIndex(user=>user.id===id);
+    if (i> -1) users[i]={id, socketId: socket.id};
+    else users.push({id, socketId: socket.id});
+    console.log(users);
   });
   socket.on("disconnect", ()=>{
     users.filter(user=>user.socketId!==socket.id);
@@ -69,6 +72,20 @@ const SocketServer=(socket: Socket)=>{
   socket.on("unfollow", async (id: string)=>{
     const user=users.find(user=>user.id===id);
     if (user) socket.to(user.socketId).emit("unfollowToClient");
+  });
+  socket.on("createNotify", async (id: string)=>{
+    const author=await User.findById(id);
+    if (!author) return;
+    // @ts-ignore;
+    const followers=users.filter(user=>author.followers.includes(user.id));
+    followers.forEach(user=>socket.to(user.socketId).emit("createNotifyToClient"));
+  });
+  socket.on("deleteNotify", async (id: string)=>{
+    const author=await User.findById(id);
+    if (!author) return;
+    // @ts-ignore;
+    const followers=users.filter(user=>author.followers.includes(user.id));
+    followers.forEach(user=>socket.to(user.socketId).emit("deleteNotifyToClient"));
   });
 };
 

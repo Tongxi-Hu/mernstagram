@@ -7,9 +7,11 @@ import {State} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {openEditPost} from "../../../store/status";
 import {deletePost} from "../../../store/homePost";
+import {SocketState} from "../../../store/socket";
 
 const CardHeader: FC<{ post: PostType }>=({post})=>{
   const authState=useSelector<State, AuthState>(state=>state.auth);
+  const socket=useSelector<State, SocketState>(state=>state.socket);
   const dispatch=useDispatch();
   const history=useHistory();
 
@@ -19,7 +21,8 @@ const CardHeader: FC<{ post: PostType }>=({post})=>{
   };
 
   const handleDeleteClick=()=>{
-    dispatch(deletePost(post, authState));
+    if (!socket) return;
+    dispatch(deletePost(post, authState, socket));
     history.replace("/");
   };
 

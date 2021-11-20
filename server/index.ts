@@ -6,11 +6,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
+import SocketServer from "./socketServer";
 import authRouter from "./router/authRouter";
 import userRouter from "./router/userRouter";
 import postRouter from "./router/postRouter";
 import commentRouter from "./router/commentRouter";
-import SocketServer from "./socketServer";
+import notifyRouter from "./router/notifyRouter";
 
 dotenv.config();
 const app=express();
@@ -35,6 +36,7 @@ app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
+app.use("/api", notifyRouter);
 
 const PORT=process.env.PORT || 4000;
 server.listen(PORT, ()=>{

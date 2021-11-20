@@ -5,11 +5,13 @@ import {AuthState} from "../store/auth";
 import {State} from "../store";
 import {notifyFail} from "../store/notify";
 import {createPost, updatePost} from "../store/homePost";
+import {SocketState} from "../store/socket";
 
 const StatusModal=()=>{
   const dispatch=useDispatch();
   const authState=useSelector<State, AuthState>(state=>state.auth);
   const status=useSelector<State, STATUS>(state=>state.status);
+  const socket=useSelector<State, SocketState>(state=>state.socket);
   const [content, setContent]=useState("");
   const [images, setImages]=useState<Array<File>>([]);
 
@@ -35,10 +37,11 @@ const StatusModal=()=>{
   const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if (images.length===0) return dispatch(notifyFail("add your photo"));
+    if (!socket) return;
     if (status.post?._id) {
       dispatch(updatePost(content, images, authState, status.post._id));
     } else {
-      dispatch(createPost(content, images, authState));
+      dispatch(createPost(content, images, authState, socket));
     }
     setContent("");
     setImages([]);

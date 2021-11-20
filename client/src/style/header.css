@@ -1,5 +1,14 @@
-.card_avatar{
-    height:121px;
+.card_avatar {
+    height: 121px;
     width: 121px;
-    object-fit:cover;
+    object-fit: cover;
+}
+
+.notify_length {
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
 }

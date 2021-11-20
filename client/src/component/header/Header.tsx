@@ -7,14 +7,13 @@ const Header=()=>{
   const navLinks=[
     {label: "Home", icon: "home", path: "/"},
     {label: "Message", icon: "near_me", path: "/message"},
-    {label: "Discover", icon: "explore", path: "/discover"},
-    {label: "Notify", icon: "favorite", path: "/notify"}
+    {label: "Discover", icon: "explore", path: "/discover"}
+
   ];
 
-
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top"
+      style={{maxWidth: "1020px", margin: "0 auto"}}>
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <h1>Mernstagram</h1></Link>

@@ -1,5 +1,4 @@
 import mongoose, {ObjectId} from "mongoose";
-import {UserType} from "./User";
 
 export interface CommentType extends mongoose.Document {
   content: string,

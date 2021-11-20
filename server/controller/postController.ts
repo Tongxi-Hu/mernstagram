@@ -37,7 +37,6 @@ const createPost=async (req: Request, res: Response)=>{
 
 const getPosts=async (req: Request, res: Response)=>{
   try {
-
     // @ts-ignore
     const posts=await Post.find({user: [...req.user.following, req.user._id]})
                           .populate<{ comments: Array<CommentType> }>("comments")
