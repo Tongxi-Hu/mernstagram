@@ -3,6 +3,10 @@
     overflow: hidden;
 }
 
-.card-title{
+.card-title {
     text-wrap: none;
+}
+
+.user_card img {
+    object-fit: cover;
 }

@@ -1,4 +1,3 @@
-
 export interface CommentType {
   _id: string,
   content: string,

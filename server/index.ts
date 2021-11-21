@@ -12,6 +12,7 @@ import userRouter from "./router/userRouter";
 import postRouter from "./router/postRouter";
 import commentRouter from "./router/commentRouter";
 import notifyRouter from "./router/notifyRouter";
+import conversationRouter from "./router/conversationRouter";
 
 dotenv.config();
 const app=express();
@@ -37,6 +38,7 @@ app.use("/api", userRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
 app.use("/api", notifyRouter);
+app.use("/api", conversationRouter);
 
 const PORT=process.env.PORT || 4000;
 server.listen(PORT, ()=>{

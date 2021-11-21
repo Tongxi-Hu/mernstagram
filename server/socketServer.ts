@@ -87,6 +87,13 @@ const SocketServer=(socket: Socket)=>{
     const followers=users.filter(user=>author.followers.includes(user.id));
     followers.forEach(user=>socket.to(user.socketId).emit("deleteNotifyToClient"));
   });
+  socket.on("newMessage", async (params: { targetId: string, conversationId: string })=>{
+    const target=await User.findById(params.targetId);
+    if (!target) return;
+    const user=users.find(user=>user.id===target._id.toString());
+    if (!user) return;
+    socket.to(user.socketId).emit("newMessageToClient", params.conversationId);
+  });
 };
 
 export default SocketServer;
